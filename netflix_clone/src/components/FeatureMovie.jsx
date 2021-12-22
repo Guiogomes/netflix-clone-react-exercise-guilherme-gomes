@@ -1,41 +1,48 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../css/FeatureMovie.css';
+import MovieContext from '../Provider/MovieContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-export default ({ item }) => {
-	const firstDate = new Date(item.first_air_date);
+const FeatureMovie = () => {
+	const { handleWatchClick, featuredData } = useContext(MovieContext)
+	const firstDate = new Date(featuredData.first_air_date);
 	let genres = [];
-	for(let i in item.genres) {
-		genres.push(item.genres[i].name)
+	for(let i in featuredData.genres) {
+		genres.push(featuredData.genres[i].name)
 	}
-	let description = item.overview
+	let description = featuredData.overview
 	if(description.length > 200) {
 		description = `${description.substring(0, 200)}...`;
 	}
+	
 	return(
+		featuredData &&
 		<section className="featured" style={
 			{
 				backgroundSize: 'cover',
 				backgroundPosition: 'center',
-				backgroundImage: `url(https://image.tmdb.org/t/p/original${item.backdrop_path})`
+				backgroundImage: `url(https://image.tmdb.org/t/p/original${featuredData.backdrop_path})`
 			}
 		}>
 			<div className="featured--vertical">
 				<div className="featured--horizontal">
-					<div className="featured--name">{item.original_name}</div>
+					<div className="featured--name">{featuredData.original_name}</div>
 					<div className="featured--info">
-						<div className="featured--average">{`${item.vote_average} pontos`}</div>
+						<div className="featured--average">{`${featuredData.vote_average} pontos`}</div>
 						<div className="featured--release">{firstDate.getFullYear()}</div>
-						<div className="featured--seasons">{item.number_of_seasons} temporada{item.number_of_seasons !== 1 ? 's' : ''}</div>
+						<div className="featured--seasons">{featuredData.number_of_seasons} temporada{featuredData.number_of_seasons !== 1 ? 's' : ''}</div>
 					</div>
 					<div className="featured--description">{description}</div>
 					<div className="featured--buttons">
-						<a className="featured--watchbutton" href={`/watch/${item.id}`}>▶︁ Assistir</a> 
-						<a className="featured--mylistbutton" href={`/list/add/${item.id}`}>+︁ Minha Lista</a>
+						<button className="featured--watchbutton" onClick={() => handleWatchClick(featuredData.id) }
+						>▶︁ Assistir</button> 
+						<a className="featured--mylistbutton" href={`/list/add/${featuredData.id}`}>+︁ Minha Lista</a>
 					</div>
 					<div className="featured--genres"><strong>Gêneros: </strong>{genres.join(', ')}</div>
 				</div>
 			</div>
 		</section>
 	)
-}
+};
+
+export default FeatureMovie; 

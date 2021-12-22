@@ -1,6 +1,8 @@
 {
   "dependencies": {
+    "build": "^0.1.4",
     "react-icons": "^4.2.0",
-    "react-router-dom": "^5.2.0"
+    "react-router-dom": "^5.2.0",
+    "start": "^5.1.0"
   }
 }
